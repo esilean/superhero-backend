@@ -3,47 +3,49 @@ using System;
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200527011636_ActivityEntityAdded")]
+    partial class ActivityEntityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-            .HasAnnotation("ProductVersion", "3.1.4");
+                .HasAnnotation("ProductVersion", "3.1.4");
 
             modelBuilder.Entity("Domain.Activity", b =>
-            {
-                b.Property<Guid>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("TEXT");
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
 
-                b.Property<string>("Category")
-                    .HasColumnType("TEXT");
+                    b.Property<string>("Category")
+                        .HasColumnType("TEXT");
 
-                b.Property<string>("City")
-                    .HasColumnType("TEXT");
+                    b.Property<string>("City")
+                        .HasColumnType("TEXT");
 
-                b.Property<DateTime>("Date")
-                    .HasColumnType("TEXT");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
 
-                b.Property<string>("Description")
-                    .HasColumnType("TEXT");
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
 
-                b.Property<string>("Title")
-                    .HasColumnType("TEXT");
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
 
-                b.Property<string>("Venue")
-                    .HasColumnType("TEXT");
+                    b.Property<string>("Venue")
+                        .HasColumnType("TEXT");
 
-                b.HasKey("Id");
+                    b.HasKey("Id");
 
-                b.ToTable("Activities");
-            });
+                    b.ToTable("Activities");
+                });
 
             modelBuilder.Entity("Domain.Value", b =>
                 {
