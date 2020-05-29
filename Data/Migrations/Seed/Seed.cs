@@ -2,26 +2,74 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Domain.Entities;
+using System.Threading.Tasks;
 
 namespace Data.Migrations.Seed
 {
     public class Seed
     {
-        public static void SeedData(DataContext context)
+        public static async Task SeedData(DataContext context)
         {
+
+            var a = Guid.NewGuid();
+            var b = Guid.NewGuid();
+            var c = Guid.NewGuid();
+
+
+            if (!context.Users.Any())
+            {
+                var users = new List<User>
+                {
+                    new User
+                    {
+                        Id = a,
+                        DisplayName = "Bob",
+                        UserName = "bob",
+                        Email = "bob@test.com"
+                    },
+                    new User
+                    {
+                        Id = b,
+                        DisplayName = "Jane",
+                        UserName = "jane",
+                        Email = "jane@test.com"
+                    },
+                    new User
+                    {
+                        Id = c,
+                        DisplayName = "Tom",
+                        UserName = "tom",
+                        Email = "tom@test.com"
+                    },
+                };
+
+                await context.Users.AddRangeAsync(users);
+                await context.SaveChangesAsync();
+
+            }
+
             if (!context.Activities.Any())
             {
-                List<Activity> activities = new List<Activity>
+                var activities = new List<Activity>
                 {
                     new Activity
                     {
                         Title = "Past Activity 1",
                         Date = DateTime.Now.AddMonths(-2),
                         Description = "Activity 2 months ago",
-                            Category = "drinks",
-                            City = "London",
-                            Venue = "Pub",
-                        },
+                        Category = "drinks",
+                        City = "London",
+                        Venue = "Pub",
+                        UserActivities = new List<UserActivity>
+                        {
+                            new UserActivity
+                            {
+                                UserId = a,
+                                IsHost = true,
+                                DateJoined = DateTime.Now.AddMonths(-2)
+                            }
+                        }
+                    },
                     new Activity
                     {
                         Title = "Past Activity 2",
@@ -29,25 +77,70 @@ namespace Data.Migrations.Seed
                         Description = "Activity 1 month ago",
                         Category = "culture",
                         City = "Paris",
-                        Venue = "Louvre",
+                        Venue = "The Louvre",
+                        UserActivities = new List<UserActivity>
+                        {
+                            new UserActivity
+                            {
+                                UserId = b,
+                                IsHost = true,
+                                DateJoined = DateTime.Now.AddMonths(-1)
+                            },
+                            new UserActivity
+                            {
+                                UserId = a,
+                                IsHost = false,
+                                DateJoined = DateTime.Now.AddMonths(-1)
+                            },
+                        }
                     },
                     new Activity
                     {
                         Title = "Future Activity 1",
                         Date = DateTime.Now.AddMonths(1),
                         Description = "Activity 1 month in future",
-                        Category = "culture",
+                        Category = "music",
                         City = "London",
-                        Venue = "Natural History Museum",
+                        Venue = "Wembly Stadium",
+                        UserActivities = new List<UserActivity>
+                        {
+                            new UserActivity
+                            {
+                                UserId = b,
+                                IsHost = true,
+                                DateJoined = DateTime.Now.AddMonths(1)
+                            },
+                            new UserActivity
+                            {
+                                UserId = a,
+                                IsHost = false,
+                                DateJoined = DateTime.Now.AddMonths(1)
+                            },
+                        }
                     },
                     new Activity
                     {
                         Title = "Future Activity 2",
                         Date = DateTime.Now.AddMonths(2),
                         Description = "Activity 2 months in future",
-                        Category = "music",
+                        Category = "food",
                         City = "London",
-                        Venue = "O2 Arena",
+                        Venue = "Jamies Italian",
+                        UserActivities = new List<UserActivity>
+                        {
+                            new UserActivity
+                            {
+                                UserId = c,
+                                IsHost = true,
+                                DateJoined = DateTime.Now.AddMonths(2)
+                            },
+                            new UserActivity
+                            {
+                                UserId = a,
+                                IsHost = false,
+                                DateJoined = DateTime.Now.AddMonths(2)
+                            },
+                        }
                     },
                     new Activity
                     {
@@ -56,16 +149,40 @@ namespace Data.Migrations.Seed
                         Description = "Activity 3 months in future",
                         Category = "drinks",
                         City = "London",
-                        Venue = "Another pub",
+                        Venue = "Pub",
+                        UserActivities = new List<UserActivity>
+                        {
+                            new UserActivity
+                            {
+                                UserId = b,
+                                IsHost = true,
+                                DateJoined = DateTime.Now.AddMonths(3)
+                            },
+                            new UserActivity
+                            {
+                                UserId = c,
+                                IsHost = false,
+                                DateJoined = DateTime.Now.AddMonths(3)
+                            },
+                        }
                     },
                     new Activity
                     {
                         Title = "Future Activity 4",
                         Date = DateTime.Now.AddMonths(4),
                         Description = "Activity 4 months in future",
-                        Category = "drinks",
+                        Category = "culture",
                         City = "London",
-                        Venue = "Yet another pub",
+                        Venue = "British Museum",
+                        UserActivities = new List<UserActivity>
+                        {
+                            new UserActivity
+                            {
+                                UserId = a,
+                                IsHost = true,
+                                DateJoined = DateTime.Now.AddMonths(4)
+                            }
+                        }
                     },
                     new Activity
                     {
@@ -74,7 +191,22 @@ namespace Data.Migrations.Seed
                         Description = "Activity 5 months in future",
                         Category = "drinks",
                         City = "London",
-                        Venue = "Just another pub",
+                        Venue = "Punch and Judy",
+                        UserActivities = new List<UserActivity>
+                        {
+                            new UserActivity
+                            {
+                                UserId = c,
+                                IsHost = true,
+                                DateJoined = DateTime.Now.AddMonths(5)
+                            },
+                            new UserActivity
+                            {
+                                UserId = b,
+                                IsHost = false,
+                                DateJoined = DateTime.Now.AddMonths(5)
+                            },
+                        }
                     },
                     new Activity
                     {
@@ -83,31 +215,75 @@ namespace Data.Migrations.Seed
                         Description = "Activity 6 months in future",
                         Category = "music",
                         City = "London",
-                        Venue = "Roundhouse Camden",
+                        Venue = "O2 Arena",
+                        UserActivities = new List<UserActivity>
+                        {
+                            new UserActivity
+                            {
+                                UserId = a,
+                                IsHost = true,
+                                DateJoined = DateTime.Now.AddMonths(6)
+                            },
+                            new UserActivity
+                            {
+                                UserId = b,
+                                IsHost = false,
+                                DateJoined = DateTime.Now.AddMonths(6)
+                            },
+                        }
                     },
                     new Activity
                     {
                         Title = "Future Activity 7",
                         Date = DateTime.Now.AddMonths(7),
-                        Description = "Activity 2 months ago",
+                        Description = "Activity 7 months in future",
                         Category = "travel",
-                        City = "London",
-                        Venue = "Somewhere on the Thames",
+                        City = "Berlin",
+                        Venue = "All",
+                        UserActivities = new List<UserActivity>
+                        {
+                            new UserActivity
+                            {
+                                UserId = a,
+                                IsHost = true,
+                                DateJoined = DateTime.Now.AddMonths(7)
+                            },
+                            new UserActivity
+                            {
+                                UserId = c,
+                                IsHost = false,
+                                DateJoined = DateTime.Now.AddMonths(7)
+                            },
+                        }
                     },
                     new Activity
                     {
                         Title = "Future Activity 8",
                         Date = DateTime.Now.AddMonths(8),
                         Description = "Activity 8 months in future",
-                        Category = "film",
+                        Category = "drinks",
                         City = "London",
-                        Venue = "Cinema",
+                        Venue = "Pub",
+                        UserActivities = new List<UserActivity>
+                        {
+                            new UserActivity
+                            {
+                                UserId = b,
+                                IsHost = true,
+                                DateJoined = DateTime.Now.AddMonths(8)
+                            },
+                            new UserActivity
+                            {
+                                UserId = a,
+                                IsHost = false,
+                                DateJoined = DateTime.Now.AddMonths(8)
+                            },
+                        }
                     }
                 };
 
-                context.Activities.AddRange(activities);
-                context.SaveChanges();
-
+                await context.Activities.AddRangeAsync(activities);
+                await context.SaveChangesAsync();
             }
         }
     }

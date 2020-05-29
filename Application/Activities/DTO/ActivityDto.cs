@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using Application.Attend.DTO;
 
-namespace Domain.Entities
+namespace Application.Activities.DTO
 {
-    public class Activity
+    public class ActivityDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
@@ -12,6 +14,8 @@ namespace Domain.Entities
         public DateTime Date { get; set; }
         public string City { get; set; }
         public string Venue { get; set; }
-        public virtual ICollection<UserActivity> UserActivities { get; set; }
+
+        [JsonPropertyName("attendees")]
+        public ICollection<AttendeeDto> UserActivities { get; set; }
     }
 }

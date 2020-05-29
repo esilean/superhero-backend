@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,27 +13,34 @@ namespace Identity.Migrations.Seed
         {
             if (!userManager.Users.Any())
             {
-                var users = new List<AppUser>() {
-                    new AppUser{
-                        DisplayName = "Le Bevilaqua",
-                        UserName = "lebevila",
-                        Email = "le.bevilaqua@gmail.com"
+                var users = new List<AppUser>
+                {
+                    new AppUser
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        DisplayName = "Bob",
+                        UserName = "bob",
+                        Email = "bob@test.com"
                     },
-                    new AppUser{
-                        DisplayName = "Re Fag",
-                        UserName = "refag",
-                        Email = "refag@gmail.com"
-                    },
-                    new AppUser{
-                        DisplayName = "Jane Doe",
+                    new AppUser
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        DisplayName = "Jane",
                         UserName = "jane",
-                        Email = "jane@gmail.com"
-                    }
+                        Email = "jane@test.com"
+                    },
+                    new AppUser
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        DisplayName = "Tom",
+                        UserName = "tom",
+                        Email = "tom@test.com"
+                    },
                 };
 
                 foreach (var user in users)
                 {
-                    await userManager.CreateAsync(user, "Pa$$w0rd");
+                    await userManager.CreateAsync(user, "Arie22ee@");
                 }
 
             }

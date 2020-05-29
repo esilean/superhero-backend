@@ -19,6 +19,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using AutoMapper;
 
 namespace API
 {
@@ -34,8 +35,10 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // DB Setup
             services.AddDbContext<DataContext>(opt =>
             {
+                opt.UseLazyLoadingProxies();
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddDbContext<AppDbContext>(opt =>
@@ -43,6 +46,7 @@ namespace API
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            // CORS
             services.AddCors(opt =>
             {
                 opt.AddPolicy("CorsPolicy", policy =>
@@ -51,7 +55,9 @@ namespace API
                 });
             });
 
+            // Other configs
             services.AddMediatR(typeof(List.Handler).Assembly);
+            services.AddAutoMapper(typeof(List.Handler).Assembly);
             services.AddControllers(opt =>
             {
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
@@ -62,11 +68,23 @@ namespace API
                     cfg.RegisterValidatorsFromAssemblyContaining<Create>();
                 });
 
+            // Identity Setup
             var buider = services.AddIdentityCore<AppUser>();
             var identityBuilder = new IdentityBuilder(buider.UserType, buider.Services);
             identityBuilder.AddEntityFrameworkStores<AppDbContext>();
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();
 
+            //Authorization
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("IsActivityHost", policy =>
+                {
+                    policy.Requirements.Add(new IsHostRequirement());
+                });
+            });
+            services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
+
+            //Authentication
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"]));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(opt =>
@@ -80,6 +98,7 @@ namespace API
                 };
             });
 
+            //DI
             services.AddScoped<IJwtGenerator, JwtGenerator>();
             services.AddScoped<IUserAcessor, UserAcessor>();
         }

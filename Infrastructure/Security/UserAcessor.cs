@@ -20,5 +20,21 @@ namespace Infrastructure.Security
 
             return username;
         }
+
+        public string GetCurrentEmail()
+        {
+            var email = _httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(x =>
+                    x.Type == ClaimTypes.Email)?.Value;
+
+            return email;
+        }
+
+        public string GetCurrentDisplayName()
+        {
+            var displayName = _httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(x =>
+                    x.Type == ClaimTypes.GivenName)?.Value;
+
+            return displayName;
+        }
     }
 }
