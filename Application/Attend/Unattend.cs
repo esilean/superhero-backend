@@ -20,8 +20,8 @@ namespace Application.Attend
         public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext _context;
-            private readonly IUserAcessor _userAcessor;
-            public Handler(DataContext context, IUserAcessor userAcessor)
+            private readonly IUserAccessor _userAcessor;
+            public Handler(DataContext context, IUserAccessor userAcessor)
             {
                 _userAcessor = userAcessor;
                 _context = context;

@@ -39,8 +39,8 @@ namespace Application.Activities
         public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext _context;
-            private readonly IUserAcessor _userAcessor;
-            public Handler(DataContext context, IUserAcessor userAcessor)
+            private readonly IUserAccessor _userAcessor;
+            public Handler(DataContext context, IUserAccessor userAcessor)
             {
                 _userAcessor = userAcessor;
                 _context = context;
@@ -61,21 +61,7 @@ namespace Application.Activities
 
                 _context.Activities.Add(activity);
 
-                //get user from local db with the identityuser _userAcessor
                 var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAcessor.GetCurrentUsername());
-                if (user == null)
-                {
-                    //we create this user, cause we do NOT have access to Identity Project
-                    var newUser = new Domain.Entities.User
-                    {
-                        UserName = _userAcessor.GetCurrentUsername(),
-                        DisplayName = _userAcessor.GetCurrentDisplayName(),
-                        Email = _userAcessor.GetCurrentEmail()
-                    };
-
-                    _context.Users.Add(newUser);
-                    user = newUser;
-                }
 
                 var attendee = new UserActivity
                 {

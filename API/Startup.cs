@@ -20,6 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using AutoMapper;
+using Infrastructure.Photos;
 
 namespace API
 {
@@ -100,7 +101,11 @@ namespace API
 
             //DI
             services.AddScoped<IJwtGenerator, JwtGenerator>();
-            services.AddScoped<IUserAcessor, UserAcessor>();
+            services.AddScoped<IUserAccessor, UserAccessor>();
+            services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+
+            //Photos
+            services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

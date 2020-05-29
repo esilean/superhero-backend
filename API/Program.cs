@@ -26,7 +26,7 @@ namespace API
                 {
                     var context = services.GetRequiredService<DataContext>();
                     context.Database.Migrate();
-                    Data.Migrations.Seed.Seed.SeedData(context);
+                    Data.Migrations.Seed.Seed.SeedData(context).Wait();
 
                     var identityContext = services.GetRequiredService<AppDbContext>();
                     var userManager = services.GetRequiredService<UserManager<AppUser>>();

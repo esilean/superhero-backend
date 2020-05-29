@@ -17,9 +17,9 @@ namespace Application.User
 
             private readonly UserManager<AppUser> _userManager;
             private readonly IJwtGenerator _jwtGenerator;
-            private readonly IUserAcessor _userAcessor;
+            private readonly IUserAccessor _userAcessor;
 
-            public Handler(UserManager<AppUser> userManager, IJwtGenerator jwtGenerator, IUserAcessor userAcessor)
+            public Handler(UserManager<AppUser> userManager, IJwtGenerator jwtGenerator, IUserAccessor userAcessor)
             {
                 _userAcessor = userAcessor;
                 _jwtGenerator = jwtGenerator;

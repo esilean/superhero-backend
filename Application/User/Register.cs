@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.Errors;
 using Application.Interfaces;
 using Application.Validators;
+using Data;
 using FluentValidation;
 using Identity;
 using Identity.Entities;
@@ -40,9 +41,11 @@ namespace Application.User
             private readonly AppDbContext _context;
             private readonly UserManager<AppUser> _userManager;
             private readonly IJwtGenerator _jwtGenerator;
+            private readonly DataContext _dataContext;
 
-            public Handler(AppDbContext context, UserManager<AppUser> userManager, IJwtGenerator jwtGenerator)
+            public Handler(AppDbContext context, DataContext dataContext, UserManager<AppUser> userManager, IJwtGenerator jwtGenerator)
             {
+                _dataContext = dataContext;
                 _context = context;
                 _userManager = userManager;
                 _jwtGenerator = jwtGenerator;
@@ -67,6 +70,27 @@ namespace Application.User
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (result.Succeeded)
                 {
+                    /***********************************************************/
+                    /***********************************************************/
+                    /***********************************************************/
+                    //we create this user, cause we do NOT have access to Identity Project
+                    // ?? TODO
+                    var newUser = new Domain.Entities.User
+                    {
+                        UserName = user.UserName,
+                        DisplayName = user.DisplayName,
+                        Email = user.Email
+                    };
+
+                    _dataContext.Users.Add(newUser);
+                    var success = await _dataContext.SaveChangesAsync() > 0;
+
+                    if (!success)
+                        throw new Exception("Problem saving local user ");
+                    /***********************************************************/
+                    /***********************************************************/
+                    /***********************************************************/
+
                     return new User
                     {
                         DisplayName = user.DisplayName,
