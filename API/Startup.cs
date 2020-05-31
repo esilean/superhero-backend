@@ -4,15 +4,12 @@ using Application.Activities;
 using Application.Interfaces;
 using Data;
 using FluentValidation.AspNetCore;
-using Identity;
-using Identity.Entities;
 using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -42,10 +39,6 @@ namespace API
                 opt.UseLazyLoadingProxies();
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
-            services.AddDbContext<AppDbContext>(opt =>
-            {
-                opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
-            });
 
             // CORS
             services.AddCors(opt =>
@@ -68,12 +61,6 @@ namespace API
                 {
                     cfg.RegisterValidatorsFromAssemblyContaining<Create>();
                 });
-
-            // Identity Setup
-            var buider = services.AddIdentityCore<AppUser>();
-            var identityBuilder = new IdentityBuilder(buider.UserType, buider.Services);
-            identityBuilder.AddEntityFrameworkStores<AppDbContext>();
-            identityBuilder.AddSignInManager<SignInManager<AppUser>>();
 
             //Authorization
             services.AddAuthorization(opt =>
@@ -100,7 +87,6 @@ namespace API
             });
 
             //DI
-            services.AddScoped<IJwtGenerator, JwtGenerator>();
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
 

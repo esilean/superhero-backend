@@ -1,32 +1,29 @@
 using System.Threading.Tasks;
 using Application.User;
-using Microsoft.AspNetCore.Authorization;
+using Application.User.DTO;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     public class UserController : BaseController
     {
-        [AllowAnonymous]
-        [HttpPost("login")]
-        public async Task<ActionResult<User>> Login(Login.Query query)
-        {
-            return await Mediator.Send(query);
-        }
-
-        [AllowAnonymous]
-        [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(Register.Command command)
+        [HttpPost("local")]
+        public async Task<ActionResult<Unit>> Create(Create.Command command)
         {
             return await Mediator.Send(command);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<User>> CurrentUser()
+        [HttpPut("local")]
+        public async Task<ActionResult<Unit>> Edit(Edit.Command command)
         {
-            return await Mediator.Send(new CurrentUser.Query());
+            return await Mediator.Send(command);
         }
 
-
+        [HttpGet("local")]
+        public async Task<ActionResult<UserDto>> Get()
+        {
+            return await Mediator.Send(new Get.Query());
+        }
     }
 }

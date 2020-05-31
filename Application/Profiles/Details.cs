@@ -19,14 +19,13 @@ namespace Application.Profiles
 
         public class Handler : IRequestHandler<Query, ProfileDto>
         {
-
             private readonly DataContext _context;
 
             public Handler(DataContext context)
             {
                 _context = context;
             }
-
+            
             public async Task<ProfileDto> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == request.Username);

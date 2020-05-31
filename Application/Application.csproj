@@ -2,7 +2,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj"/>
     <ProjectReference Include="..\Data\Data.csproj"/>
-    <ProjectReference Include="..\Identity\Identity.csproj"/>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.0"/>
