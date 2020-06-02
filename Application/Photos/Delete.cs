@@ -45,7 +45,7 @@ namespace Application.Photos
                 var result = _photoAccessor.DeletePhoto(photo.Id);
 
                 if (result == null)
-                    throw new Exception("Problem deleting the photo");
+                    throw new Exception("Problem deleting the photo in cloud");
 
                 user.Photos.Remove(photo);
 

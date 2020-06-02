@@ -43,7 +43,7 @@ namespace Application.User
                 var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUsername());
 
                 if (user != null)
-                    throw new RestException(HttpStatusCode.NotFound, new { User = "already exist" });
+                    throw new RestException(HttpStatusCode.BadRequest, new { User = "already exist" });
 
                 user = new Domain.Entities.User
                 {

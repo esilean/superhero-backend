@@ -25,7 +25,8 @@ namespace Data.Migrations.Seed
                         Id = a,
                         DisplayName = "Bob",
                         UserName = "bob",
-                        Email = "bob@test.com"
+                        Email = "bob@test.com",
+                        Bio = "Bobs Bio"
                     },
                     new User
                     {

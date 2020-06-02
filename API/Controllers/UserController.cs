@@ -14,12 +14,6 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
-        [HttpPut("local")]
-        public async Task<ActionResult<Unit>> Edit(Edit.Command command)
-        {
-            return await Mediator.Send(command);
-        }
-
         [HttpGet("local")]
         public async Task<ActionResult<UserDto>> Get()
         {
