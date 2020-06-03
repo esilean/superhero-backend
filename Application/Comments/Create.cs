@@ -44,7 +44,7 @@ namespace Application.Comments
                     Author = user,
                     Activity = activity,
                     Body = request.Body,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.UtcNow
                 };
 
                 activity.Comments.Add(comment);

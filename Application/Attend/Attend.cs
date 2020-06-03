@@ -49,7 +49,7 @@ namespace Application.Attend
                     Activity = activity,
                     User = user,
                     IsHost = false,
-                    DateJoined = DateTime.Now,
+                    DateJoined = DateTime.UtcNow,
                 };
 
                 _context.UserActivities.Add(attendance);

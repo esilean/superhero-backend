@@ -22,6 +22,9 @@ using Microsoft.AspNetCore.Http;
 using System.Linq;
 using API.SignalR;
 using System.Threading.Tasks;
+using Application.Profiles;
+using Application.Profiles.Interfaces;
+using System;
 
 namespace API
 {
@@ -49,7 +52,11 @@ namespace API
             {
                 opt.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000").AllowCredentials();
+                    policy
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .WithExposedHeaders("WWW-Authenticate")
+                    .WithOrigins("http://localhost:3000").AllowCredentials();
                 });
             });
 
@@ -88,6 +95,8 @@ namespace API
                     IssuerSigningKey = key,
                     ValidateAudience = false,
                     ValidateIssuer = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
                 };
                 //add token to hub context
                 opt.Events = new JwtBearerEvents
@@ -106,6 +115,7 @@ namespace API
             });
 
             //DI
+            services.AddScoped<IProfileReader, ProfileReader>();
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
 
