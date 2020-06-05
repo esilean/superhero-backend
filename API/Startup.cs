@@ -1,30 +1,29 @@
-using System.Text;
 using API.Middleware;
+using API.SignalR;
 using Application.Activities;
 using Application.Interfaces;
+using Application.Profiles;
+using Application.Profiles.Interfaces;
+using AutoMapper;
 using Data;
 using FluentValidation.AspNetCore;
+using Infrastructure.Photos;
 using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using AutoMapper;
-using Infrastructure.Photos;
-using Microsoft.AspNetCore.Http;
-using System.Linq;
-using API.SignalR;
-using System.Threading.Tasks;
-using Application.Profiles;
-using Application.Profiles.Interfaces;
 using System;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace API
 {
@@ -62,8 +61,6 @@ namespace API
         }
         public void ConfigureServices(IServiceCollection services)
         {
-
-
             // CORS
             services.AddCors(opt =>
             {
@@ -73,7 +70,7 @@ namespace API
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .WithExposedHeaders("WWW-Authenticate")
-                    .WithOrigins("http://localhost:3000").AllowCredentials();
+                    .WithOrigins(Configuration["ActivitiesApp"]).AllowCredentials();
                 });
             });
 
@@ -148,10 +145,24 @@ namespace API
             app.UseMiddleware<ErrorHandlerMiddleware>();
             if (env.IsDevelopment())
             {
-                // app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();
             }
 
             // app.UseHttpsRedirection();
+            app.UseXContentTypeOptions();
+            app.UseReferrerPolicy(opt => opt.NoReferrer());
+            app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
+            app.UseXfo(opt => opt.Deny());
+            app.UseCspReportOnly(opt => opt
+               .BlockAllMixedContent()
+               .StyleSources(s => s.Self())
+               .FontSources(s => s.Self())
+               .FormActions(s => s.Self())
+               .FrameAncestors(s => s.Self())
+               .ImageSources(s => s.Self())
+               .ScriptSources(s => s.Self())
+                );
+
 
             app.UseRouting();
             app.UseCors("CorsPolicy");
@@ -163,6 +174,10 @@ namespace API
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<ChatHub>("/chat");
+                endpoints.MapGet("/", async context =>
+                {
+                    await context.Response.WriteAsync("SUPER HERO API IS RUNNING! MYSQL!");
+                });
             });
         }
 

@@ -22,7 +22,7 @@ namespace API
                     var context = services.GetRequiredService<DataContext>();
                     context.Database.Migrate();
                     Data.Migrations.Seed.Seed.SeedData(context).Wait();
- }
+                }
                 catch (Exception ex)
                 {
                     var logger = services.GetRequiredService<ILogger<Program>>();
@@ -37,6 +37,8 @@ namespace API
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseIISIntegration();
+                    webBuilder.UseKestrel(x => x.AddServerHeader = false);
                     webBuilder.UseStartup<Startup>();
                 });
     }

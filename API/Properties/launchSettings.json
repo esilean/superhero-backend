@@ -13,7 +13,7 @@
       "launchBrowser": false,
       "launchUrl": "api/values",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Production"
       }
     },
     "API": {
@@ -22,7 +22,7 @@
       "launchUrl": "api/values",
       "applicationUrl": "http://localhost:5002",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }
